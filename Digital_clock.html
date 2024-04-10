@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #clock {
+            height: 100px;
+            width: 600px;
+            margin: auto;
+            margin-top: 350px;
+            font-size: 100px;
+            font-weight: bold;
+        }
+
+        #sun,
+        #moon {
+            position: absolute;
+            top: 50%;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+
+        #sun {
+            left: 0px;
+            background-color: #ffd700;
+        }
+
+        #moon {
+            left: 0px;
+            background-color: #d3d3d3;
+        }
+        #stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;            
+            z-index: -1;            
+            display: none;           
+        }
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+        }
+
+        @keyframes moveSun {
+            0% {
+                transform: translate(0%, 0%);
+            }
+
+            50% {
+                transform: translate(650%, -200%);
+            }
+
+            100% {
+                transform: translate(1300%, 0%);
+            }
+        }
+
+        @keyframes moveMoon {
+            0% {
+                transform: translate(0%, 0%);
+            }
+
+            50% {
+                transform: translate(650%, -200%);
+            }
+
+            100% {
+                transform: translate(1300%, 0%);
+            }
+        }
+    </style>
+
+</head>
+
+<body onload="cl()">
+    <div id="sun"></div>
+    <div id="moon"></div>
+    <div id="stars"></div>
+    <div id="clock"></div>
+    
+    <script>
+        function cl() {
+            var date = new Date();
+            hour = date.getHours();
+            minute = date.getMinutes();
+            second = date.getSeconds();
+
+            var body = document.body;
+            if (hour >= 4 && hour < 17) { // Daytime (4 AM to 7 PM)
+                body.style.backgroundColor = "#87ceeb"; // Blue sky
+                document.getElementById('sun').style.display = 'block';
+                document.getElementById('moon').style.display = 'none';
+                document.getElementById('sun').style.animation = 'moveSun 100s linear infinite'; // Apply sun animation
+                document.getElementById('clock').style.color ="black";
+            } else { // Nighttime (7 PM to 4 AM)
+                body.style.backgroundColor = "#000000"; // Black sky
+                document.getElementById('sun').style.display = 'none';
+                document.getElementById('moon').style.display = 'block';
+                document.getElementById('moon').style.animation = 'moveMoon 100s linear infinite'; // Apply moon animation
+                document.getElementById('clock').style.color = 'white';
+                createStars();
+            }
+
+            //for AM or PM 
+            if (hour < 12) {
+                session = "AM";
+            } else {
+                session = "PM";
+            }
+            // for hour
+            if (hour > 12) {
+                hour = "0" + (hour - 12);
+            } else if (hour < 12) {
+                hour = "0" + hour;
+            } else if (hour == 0) {
+                hour = 12;
+            }
+            //for Minute
+            if (minute < 10) {
+                minute = "0" + minute;
+            }
+            //for second
+            if (second < 10) {
+                second = "0" + second;
+            }
+
+            document.getElementById("clock").innerHTML = hour + ":" + minute + ":" + second + " " + session;
+            setTimeout(cl, 1000);
+        }
+        function createStars() {
+            var starsContainer = document.getElementById('stars');
+            starsContainer.innerHTML = ''; // Clear previous stars
+
+            for (var i = 0; i < 100; i++) {
+                var star = document.createElement('div');
+                star.classList.add('star');
+                var size = Math.random() * 3; // Random star size
+                var x = Math.random() * window.innerWidth; // Random horizontal position
+                var y = Math.random() * window.innerHeight; // Random vertical position
+                var duration = Math.random() * 2 + 1; // Random duration for twinkling effect
+                var delay = Math.random() * 5; // Random delay before animation starts
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = x + 'px';
+                star.style.top = y + 'px';
+                star.style.animation = 'twinkle ' + duration + 's infinite ' + delay + 's';
+                starsContainer.appendChild(star);
+            }
+
+            starsContainer.style.display = 'block'; // Show stars
+        }
+
+    </script>
+</body>
+
+</html>
